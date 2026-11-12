@@ -1,0 +1,1144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kids Learning World</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#2878f0;--purple:#8561ed;--bg:#f4f7ff;--dark:#172554}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:#172033}
+button,input{font:inherit}
+button{cursor:pointer;border:0}
+.hidden{display:none!important}
+.auth-screen{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#e8f1ff,#f4edff)}
+.auth-card{background:white;width:100%;max-width:420px;padding:30px;border-radius:24px;box-shadow:0 15px 45px #304b8018}
+.logo{text-align:center;font-size:27px;font-weight:800;color:var(--blue);margin-bottom:8px}
+.auth-sub{text-align:center;color:#7b8498;font-size:13px;margin-bottom:22px}
+.auth-tabs{display:flex;background:#f0f3fa;border-radius:12px;padding:4px;margin-bottom:18px}
+.auth-tabs button{width:50%;padding:10px;border-radius:9px;background:transparent;color:#68738a;font-weight:600}
+.auth-tabs button.active{background:white;color:var(--blue);box-shadow:0 2px 8px #0000000c}
+.field{margin:13px 0}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+.field input{width:100%;padding:13px;border:1px solid #dce2ee;border-radius:11px;outline:none}
+.field input:focus{border-color:var(--blue)}
+.primary{background:var(--blue);color:white;padding:13px 18px;border-radius:11px;font-weight:700}
+.auth-submit{width:100%;margin-top:10px}
+.message{font-size:13px;text-align:center;margin-top:12px;color:#e04444}
+.message.success{color:#159447}
+.app{min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;background:white;padding:24px 16px;box-shadow:3px 0 20px #1d376008;z-index:10}
+.side-logo{font-size:23px;font-weight:800;color:var(--blue);padding:5px 12px 28px}
+.side-logo span{color:var(--purple)}
+.nav-btn{width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;margin:5px 0;border-radius:11px;background:transparent;color:#647089;text-align:left;font-weight:600}
+.nav-btn.active,.nav-btn:hover{background:#edf4ff;color:var(--blue)}
+.nav-btn .ico{font-size:19px;width:25px;text-align:center}
+.main{margin-left:245px;padding:25px;min-height:100vh}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:25px}
+.topbar h2{font-size:22px}
+.top-right{display:flex;align-items:center;gap:12px}
+.student-label{font-size:13px;font-weight:600;color:#536079}
+.avatar{width:40px;height:40px;border-radius:50%;background:#e8efff;color:var(--blue);display:grid;place-items:center;font-weight:800}
+.menu-btn{display:none;background:white;padding:9px 12px;border-radius:9px;font-size:20px}
+.page{display:none}
+.page.active{display:block}
+.welcome{background:linear-gradient(110deg,#2878f0,#8561ed);border-radius:20px;padding:25px;color:white;display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}
+.welcome h2{font-size:23px;margin-bottom:7px}
+.welcome p{font-size:13px;opacity:.9}
+.welcome-art{font-size:65px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:white;padding:18px;border-radius:16px;box-shadow:0 3px 15px #00000006}
+.stat-icon{font-size:24px}
+.stat-card p{font-size:12px;color:#78839a;margin-top:8px}
+.stat-card h3{font-size:24px;margin-top:3px}
+.section-title{font-size:18px;margin:22px 0 13px}
+.topic-grid,.learning-grid,.game-grid,.video-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.topic-card,.learning-card,.game-card,.video-card{background:white;border-radius:16px;padding:18px;box-shadow:0 3px 15px #00000006}
+.topic-card{cursor:pointer}
+.topic-card .emoji,.learning-card .emoji,.game-card .emoji{font-size:34px}
+.topic-card h4,.learning-card h4,.game-card h4{margin:8px 0 4px}
+.topic-card p,.learning-card p,.game-card p{font-size:12px;color:#78839a}
+.content-panel{background:white;border-radius:17px;padding:20px;margin-top:15px}
+.content-panel h3{margin-bottom:13px}
+.lesson-card{background:#f3f6ff;padding:15px;border-radius:13px;margin:10px 0;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.small-btn{background:#2878f0;color:white;padding:9px 13px;border-radius:9px;font-size:12px;font-weight:600}
+.secondary-btn{background:#edf2ff;color:#2878f0;padding:9px 13px;border-radius:9px;font-size:12px;font-weight:600}
+.game-area{background:white;border-radius:18px;padding:22px;margin-top:15px}
+.game-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.progress-track{height:9px;background:#e9edf5;border-radius:20px;overflow:hidden;margin:15px 0}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#2878f0,#8561ed);transition:width .2s}
+.question{text-align:center;padding:20px 5px}
+.question-emoji{font-size:65px}
+.question h2{font-size:21px;margin-top:12px}
+.answer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px}
+.answer-btn{background:#f0f4ff;border:2px solid transparent;padding:14px;border-radius:12px;font-weight:700;color:#263653}
+.answer-btn:hover{border-color:var(--blue)}
+.answer-btn:disabled{opacity:.7}
+.feedback{text-align:center;font-weight:700;margin:15px 0;min-height:24px}
+.next-btn{display:block;margin:10px auto}
+.video-card iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:10px}
+.video-card input{width:100%;padding:10px;border:1px solid #ddd;border-radius:9px;margin:8px 0}
+.profile-row{padding:13px 0;border-bottom:1px solid #edf0f5;font-size:14px}
+.profile-row b{display:inline-block;min-width:120px}
+.logout-btn{background:#fff0f0;color:#e34a4a;padding:10px 14px;border-radius:10px;font-weight:700}
+.empty-state{padding:25px;text-align:center;color:#8993a7}
+@media(max-width:900px){
+.stats{grid-template-columns:repeat(2,1fr)}
+.topic-grid,.learning-grid,.game-grid,.video-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+.sidebar{width:260px;transform:translateX(-110%);transition:.25s}
+.sidebar.open{transform:translateX(0)}
+.main{margin-left:0;padding:15px}
+.menu-btn{display:block}
+.topbar h2{font-size:18px}
+.welcome{padding:20px}
+.welcome h2{font-size:19px}
+.welcome-art{font-size:48px}
+}
+@media(max-width:420px){
+.topic-grid,.learning-grid,.game-grid,.video-grid{grid-template-columns:1fr}
+.stats{gap:9px}
+.stat-card{padding:13px}
+.stat-card h3{font-size:21px}
+}
+</style>
+</head>
+<body>
+
+<section class="auth-screen" id="authScreen">
+ <div class="auth-card">
+  <div class="logo">🌈 Kids Learning World</div>
+  <p class="auth-sub">Learn • Play • Grow</p>
+  <div class="auth-tabs">
+   <button id="loginTab" class="active" type="button" onclick="showAuthTab('login')">Login</button>
+   <button id="registerTab" type="button" onclick="showAuthTab('register')">Register</button>
+  </div>
+  <form id="loginForm">
+   <div class="field"><label>Student ID</label><input id="loginId" placeholder="Enter your Student ID" required></div>
+   <div class="field"><label>Age</label><input id="loginAge" type="number" min="1" max="5" placeholder="Enter age" required></div>
+   <button class="primary auth-submit" type="submit">Login</button>
+  </form>
+  <form id="registerForm" class="hidden">
+   <div class="field"><label>Child's Name</label><input id="registerName" maxlength="40" placeholder="Enter child's name" required></div>
+   <div class="field"><label>Age (1–5)</label><input id="registerAge" type="number" min="1" max="5" placeholder="Enter age" required></div>
+   <button class="primary auth-submit" type="submit">Create Account</button>
+  </form>
+  <div class="message" id="authMessage" aria-live="polite"></div>
+ </div>
+</section>
+
+<div class="app hidden" id="app">
+ <aside class="sidebar" id="sidebar">
+  <div class="side-logo">Kids <span>World</span> 🌈</div>
+  <nav>
+   <button class="nav-btn active" onclick="showPage('home',this)"><span class="ico">🏠</span> Home</button>
+   <button class="nav-btn" onclick="showPage('learning',this)"><span class="ico">📚</span> My Learning</button>
+   <button class="nav-btn" onclick="showPage('games',this)"><span class="ico">🎮</span> Games</button>
+   <button class="nav-btn" onclick="showPage('challenge',this)"><span class="ico">🏆</span> Daily Challenge</button>
+   <button class="nav-btn" onclick="showPage('videos',this)"><span class="ico">▶️</span> Videos</button>
+   <button class="nav-btn" onclick="showPage('progress',this)"><span class="ico">📈</span> Progress</button>
+   <button class="nav-btn" onclick="showPage('rewards',this)"><span class="ico">🎁</span> Rewards</button>
+   <button class="nav-btn" onclick="showPage('profile',this)"><span class="ico">👤</span> Profile</button>
+  </nav>
+  <button class="logout-btn" style="width:100%;margin-top:22px" onclick="logout()">Logout</button>
+ </aside>
+
+ <main class="main">
+  <header class="topbar">
+   <div style="display:flex;align-items:center;gap:10px">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <h2 id="pageTitle">Home</h2>
+   </div>
+   <div class="top-right">
+    <span class="student-label" id="headerName">Little Learner</span>
+    <div class="avatar" id="headerAvatar">L</div>
+   </div>
+  </header>
+
+  <section class="page active" id="homePage">
+   <div class="welcome">
+    <div><h2>Hello, <span id="welcomeName">Little Learner</span>! 👋</h2><p>Ready for a fun learning adventure?</p></div>
+    <div class="welcome-art">🦊</div>
+   </div>
+   <div class="stats">
+    <div class="stat-card"><div class="stat-icon">📚</div><p>Learning Topics</p><h3>05</h3></div>
+    <div class="stat-card"><div class="stat-icon">🎮</div><p>Games Played</p><h3 id="homeGames">0</h3></div>
+    <div class="stat-card"><div class="stat-icon">⭐</div><p>Stars Earned</p><h3 id="homeStars">0</h3></div>
+    <div class="stat-card"><div class="stat-icon">✅</div><p>Daily Challenge</p><h3 id="homeDaily">0/10</h3></div>
+   </div>
+   <h3 class="section-title">Explore Learning</h3>
+   <div class="topic-grid" id="homeTopicCards"></div>
+  </section>
+
+  <section class="page" id="learningPage">
+   <h3 class="section-title">Choose a Learning Topic</h3>
+   <div class="learning-grid" id="learningGrid"></div>
+   <div class="content-panel hidden" id="lessonArea">
+    <h3 id="lessonTitle">Lesson</h3>
+    <div id="lessonContent"></div>
+    <button class="secondary-btn" onclick="closeLesson()">Back to Topics</button>
+   </div>
+  </section>
+
+  <section class="page" id="gamesPage">
+   <h3 class="section-title">Choose Your Game</h3>
+   <div class="game-grid" id="gameGrid"></div>
+   <div class="game-area hidden" id="gameArea">
+    <div class="game-top"><b id="gameTitle">Game</b><span id="gameCounter">Question 1/10</span></div>
+    <div class="progress-track"><div class="progress-fill" id="gameBar"></div></div>
+    <div class="question"><div class="question-emoji" id="questionEmoji">🐱</div><h2 id="questionText">Choose the correct answer</h2></div>
+    <div class="answer-grid" id="answerGrid"></div>
+    <div class="feedback" id="gameFeedback"></div>
+    <button class="primary next-btn hidden" id="nextGameBtn" onclick="nextQuestion()">Next</button>
+   </div>
+  </section>
+
+  <section class="page" id="challengePage">
+   <div class="content-panel">
+    <h3>🏆 Daily Challenge</h3>
+    <p>Complete 10 questions and earn stars!</p>
+    <div class="progress-track"><div class="progress-fill" id="challengeBar"></div></div>
+    <p id="challengeCount">Today's progress: 0/10</p>
+    <button class="primary" style="margin-top:15px" onclick="startChallenge()">Start Challenge</button>
+   </div>
+  </section>
+
+  <section class="page" id="videosPage">
+   <div class="content-panel">
+    <h3>▶️ Learning Videos</h3>
+    <p style="font-size:13px;color:#78839a">Paste a YouTube video link to play it here.</p>
+    <div class="field"><label>YouTube Video URL</label><input id="videoUrlInput" placeholder="https://www.youtube.com/watch?v=..."></div>
+    <button class="primary" onclick="playCustomVideo()">Play Video</button>
+    <div id="videoMessage" class="message"></div>
+    <div id="videoPlayer" style="margin-top:15px"></div>
+   </div>
+  </section>
+
+  <section class="page" id="progressPage">
+   <div class="stats">
+    <div class="stat-card"><p>Games Played</p><h3 id="progressGames">0</h3></div>
+    <div class="stat-card"><p>Correct Answers</p><h3 id="progressCorrect">0</h3></div>
+    <div class="stat-card"><p>Stars</p><h3 id="progressStars">0</h3></div>
+    <div class="stat-card"><p>Daily Challenge</p><h3 id="progressDaily">0/10</h3></div>
+   </div>
+  </section>
+
+  <section class="page" id="rewardsPage">
+   <div class="content-panel">
+    <h3>🎁 My Rewards</h3>
+    <h2 style="color:#e6a000;margin:10px 0">⭐ <span id="rewardStars">0</span> Stars</h2>
+    <div id="rewardList"></div>
+   </div>
+  </section>
+
+  <section class="page" id="profilePage">
+   <div class="content-panel">
+    <h3>👤 My Profile</h3>
+    <div class="profile-row"><b>Name</b><span id="profileName">-</span></div>
+    <div class="profile-row"><b>Student ID</b><span id="profileId">-</span></div>
+    <div class="profile-row"><b>Age</b><span id="profileAge">-</span></div>
+   </div>
+  </section>
+ </main>
+</div>
+
+<!-- PART 2 STARTS BELOW -->
+<script>
+
+/* ========== PART 2: LEARNING SYSTEM ========== */
+
+const numberWords = [
+"One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten",
+"Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen","Twenty",
+"Twenty One","Twenty Two","Twenty Three","Twenty Four","Twenty Five","Twenty Six","Twenty Seven","Twenty Eight","Twenty Nine","Thirty",
+"Thirty One","Thirty Two","Thirty Three","Thirty Four","Thirty Five","Thirty Six","Thirty Seven","Thirty Eight","Thirty Nine","Forty",
+"Forty One","Forty Two","Forty Three","Forty Four","Forty Five","Forty Six","Forty Seven","Forty Eight","Forty Nine","Fifty",
+"Fifty One","Fifty Two","Fifty Three","Fifty Four","Fifty Five","Fifty Six","Fifty Seven","Fifty Eight","Fifty Nine","Sixty",
+"Sixty One","Sixty Two","Sixty Three","Sixty Four","Sixty Five","Sixty Six","Sixty Seven","Sixty Eight","Sixty Nine","Seventy",
+"Seventy One","Seventy Two","Seventy Three","Seventy Four","Seventy Five","Seventy Six","Seventy Seven","Seventy Eight","Seventy Nine","Eighty",
+"Eighty One","Eighty Two","Eighty Three","Eighty Four","Eighty Five","Eighty Six","Eighty Seven","Eighty Eight","Eighty Nine","Ninety",
+"Ninety One","Ninety Two","Ninety Three","Ninety Four","Ninety Five","Ninety Six","Ninety Seven","Ninety Eight","Ninety Nine","One Hundred"
+];
+
+const alphabetData = [
+["A","Apple","🍎"],["B","Ball","⚽"],["C","Cat","🐱"],
+["D","Dog","🐶"],["E","Elephant","🐘"],["F","Fish","🐟"],
+["G","Grapes","🍇"],["H","House","🏠"],["I","Ice Cream","🍦"],
+["J","Juice","🧃"],["K","Kite","🪁"],["L","Lion","🦁"],
+["M","Monkey","🐵"],["N","Nest","🪺"],["O","Orange","🍊"],
+["P","Parrot","🦜"],["Q","Queen","👑"],["R","Rabbit","🐰"],
+["S","Sun","☀️"],["T","Tiger","🐯"],["U","Umbrella","☂️"],
+["V","Van","🚐"],["W","Watch","⌚"],["X","Xylophone","🎼"],
+["Y","Yak","🐂"],["Z","Zebra","🦓"]
+];
+
+const animalData = [
+["🐶","Dog"],["🐱","Cat"],["🦁","Lion"],["🐯","Tiger"],
+["🐘","Elephant"],["🐵","Monkey"],["🐰","Rabbit"],["🐼","Panda"],
+["🦒","Giraffe"],["🐻","Bear"],["🐸","Frog"],["🐮","Cow"],
+["🐴","Horse"],["🐷","Pig"],["🐔","Hen"],["🦆","Duck"],
+["🐟","Fish"],["🐬","Dolphin"],["🦜","Parrot"],["🦋","Butterfly"]
+];
+
+const colorData = [
+["🔴","Red"],["🔵","Blue"],["🟢","Green"],["🟡","Yellow"],
+["🟠","Orange"],["🟣","Purple"],["⚫","Black"],["⚪","White"],
+["🟤","Brown"],["🩷","Pink"]
+];
+
+const shapeData = [
+["🔴","Circle"],["🟥","Square"],["🔺","Triangle"],
+["▭","Rectangle"],["⭐","Star"],["❤️","Heart"],
+["⬡","Hexagon"],["💎","Diamond"],["🥚","Oval"]
+];
+
+const learningTopics = [
+ {id:"alphabet",title:"Alphabet A–Z",emoji:"🔤",description:"Learn all 26 letters"},
+ {id:"numbers",title:"Numbers 1–100",emoji:"🔢",description:"Learn counting and number names"},
+ {id:"animals",title:"Animals",emoji:"🐯",description:"Learn animal names"},
+ {id:"colors",title:"Colors",emoji:"🎨",description:"Discover beautiful colors"},
+ {id:"shapes",title:"Shapes",emoji:"🔷",description:"Learn different shapes"}
+];
+
+function speakText(text){
+ if(!("speechSynthesis" in window)) return;
+ window.speechSynthesis.cancel();
+ const speech = new SpeechSynthesisUtterance(String(text));
+ speech.lang = "en-IN";
+ speech.rate = 0.8;
+ window.speechSynthesis.speak(speech);
+}
+
+function createLearningCard(topic){
+ return `
+ <div class="learning-card">
+  <div class="emoji">${topic.emoji}</div>
+  <h4>${topic.title}</h4>
+  <p>${topic.description}</p>
+  <button class="small-btn" style="margin-top:12px" onclick="openLesson('${topic.id}')">Start Learning</button>
+ </div>`;
+}
+
+function renderLearning(){
+ const grid=document.getElementById("learningGrid");
+ const home=document.getElementById("homeTopicCards");
+ if(!grid || !home) return;
+
+ grid.innerHTML=learningTopics.map(createLearningCard).join("");
+
+ home.innerHTML=learningTopics.map(topic=>`
+ <div class="topic-card" onclick="showPage('learning');openLesson('${topic.id}')">
+  <div class="emoji">${topic.emoji}</div>
+  <h4>${topic.title}</h4>
+  <p>${topic.description}</p>
+ </div>`).join("");
+}
+
+function openLesson(id){
+ const topic=learningTopics.find(t=>t.id===id);
+ if(!topic) return;
+
+ const area=document.getElementById("lessonArea");
+ const content=document.getElementById("lessonContent");
+ document.getElementById("lessonTitle").textContent=topic.title;
+ area.classList.remove("hidden");
+
+ let html="";
+
+ if(id==="alphabet"){
+  html=alphabetData.map(item=>`
+   <div class="lesson-card">
+    <div><strong style="font-size:24px">${item[0]} ${item[0].toLowerCase()}</strong>
+    <p>${item[1]} ${item[2]}</p></div>
+    <button class="small-btn" onclick="speakText('${item[0]} for ${item[1]}')">🔊 Listen</button>
+   </div>`).join("");
+ }
+
+ if(id==="numbers"){
+  html=numberWords.map((word,index)=>`
+   <div class="lesson-card">
+    <div><strong style="font-size:22px">${index+1}</strong>
+    <p>${word}</p></div>
+    <button class="small-btn" onclick="speakText('${index+1}')">🔊 Listen</button>
+   </div>`).join("");
+ }
+
+ if(id==="animals"){
+  html=animalData.map(item=>`
+   <div class="lesson-card">
+    <div><strong style="font-size:25px">${item[0]}</strong><p>${item[1]}</p></div>
+    <button class="small-btn" onclick="speakText('${item[1]}')">🔊 Listen</button>
+   </div>`).join("");
+ }
+
+ if(id==="colors"){
+  html=colorData.map(item=>`
+   <div class="lesson-card">
+    <div><strong style="font-size:25px">${item[0]}</strong><p>${item[1]}</p></div>
+    <button class="small-btn" onclick="speakText('${item[1]}')">🔊 Listen</button>
+   </div>`).join("");
+ }
+
+ if(id==="shapes"){
+  html=shapeData.map(item=>`
+   <div class="lesson-card">
+    <div><strong style="font-size:25px">${item[0]}</strong><p>${item[1]}</p></div>
+    <button class="small-btn" onclick="speakText('${item[1]}')">🔊 Listen</button>
+   </div>`).join("");
+ }
+
+ content.innerHTML=html;
+}
+
+function closeLesson(){
+ document.getElementById("lessonArea").classList.add("hidden");
+ window.speechSynthesis?.cancel();
+}
+
+renderLearning();
+
+/* ========== END PART 2 ========== */
+
+/* ================================
+   PART 3 — GAMES SYSTEM
+================================ */
+
+const gameQuestions = [
+  { q: "Which letter comes first?", emoji: "🔤", options: ["A", "B", "C"], answer: "A" },
+  { q: "What comes after 2?", emoji: "🔢", options: ["1", "3", "4"], answer: "3" },
+  { q: "Which animal says Meow?", emoji: "🐾", options: ["Dog", "Cat", "Cow"], answer: "Cat" },
+  { q: "What color is the sun usually shown as?", emoji: "☀️", options: ["Blue", "Yellow", "Green"], answer: "Yellow" },
+  { q: "How many sides does a triangle have?", emoji: "🔺", options: ["2", "3", "4"], answer: "3" },
+  { q: "Which letter comes after A?", emoji: "🔤", options: ["C", "B", "D"], answer: "B" },
+  { q: "What comes after 5?", emoji: "🔢", options: ["6", "8", "4"], answer: "6" },
+  { q: "Which animal is very big?", emoji: "🐘", options: ["Ant", "Elephant", "Mouse"], answer: "Elephant" },
+  { q: "Which one is a fruit?", emoji: "🍎", options: ["Apple", "Chair", "Book"], answer: "Apple" },
+  { q: "How many wheels does a bicycle have?", emoji: "🚲", options: ["2", "3", "4"], answer: "2" },
+  { q: "Which shape is round?", emoji: "⚪", options: ["Square", "Circle", "Triangle"], answer: "Circle" },
+  { q: "Which animal gives us milk?", emoji: "🐄", options: ["Cow", "Lion", "Tiger"], answer: "Cow" },
+  { q: "What comes after 9?", emoji: "🔢", options: ["8", "10", "11"], answer: "10" },
+  { q: "Which letter starts Apple?", emoji: "🍎", options: ["A", "B", "C"], answer: "A" },
+  { q: "Which color is a leaf?", emoji: "🍃", options: ["Pink", "Green", "Black"], answer: "Green" },
+  { q: "How many legs does a dog have?", emoji: "🐶", options: ["2", "4", "6"], answer: "4" },
+  { q: "Which one can fly?", emoji: "🦋", options: ["Butterfly", "Fish", "Cat"], answer: "Butterfly" },
+  { q: "What comes before 5?", emoji: "🔢", options: ["3", "4", "6"], answer: "4" },
+  { q: "Which shape has four equal sides?", emoji: "🟦", options: ["Circle", "Square", "Triangle"], answer: "Square" },
+  { q: "Which animal says Moo?", emoji: "🐄", options: ["Cow", "Cat", "Duck"], answer: "Cow" }
+];
+
+let currentGameIndex = 0;
+let gameAnswered = false;
+let gameSessionQuestions = [];
+
+function renderGames() {
+  const grid = document.getElementById("gameGrid");
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  const games = [
+    { title: "Alphabet Fun", emoji: "🔤", desc: "Learn letters A to Z", index: 0 },
+    { title: "Number Challenge", emoji: "🔢", desc: "Practice counting", index: 1 },
+    { title: "Animal Quiz", emoji: "🐯", desc: "Discover animals", index: 2 },
+    { title: "Color Quiz", emoji: "🎨", desc: "Learn colors", index: 3 },
+    { title: "Shape Game", emoji: "🔺", desc: "Explore shapes", index: 4 },
+    { title: "Mixed Quiz", emoji: "⭐", desc: "Try different questions", index: 5 }
+  ];
+
+  games.forEach(game => {
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "topic-card";
+    card.innerHTML = `
+      <div class="topic-icon">${game.emoji}</div>
+      <h3>${game.title}</h3>
+      <p>${game.desc}</p>
+      <span>Play Now →</span>
+    `;
+    card.addEventListener("click", () => startGame(game.index));
+    grid.appendChild(card);
+  });
+}
+
+function startGame(type = 5) {
+  if (type === 0) {
+    gameSessionQuestions = gameQuestions.filter(q =>
+      q.q.includes("letter") || q.q.includes("Letter")
+    );
+  } else if (type === 1) {
+    gameSessionQuestions = gameQuestions.filter(q =>
+      q.q.includes("comes") || q.q.includes("counting")
+    );
+  } else if (type === 2) {
+    gameSessionQuestions = gameQuestions.filter(q =>
+      q.q.includes("animal") || q.q.includes("Animal") ||
+      q.q.includes("legs") || q.q.includes("Moo") ||
+      q.q.includes("Meow")
+    );
+  } else if (type === 3) {
+    gameSessionQuestions = gameQuestions.filter(q =>
+      q.q.includes("color") || q.q.includes("Color") ||
+      q.q.includes("sun") || q.q.includes("leaf")
+    );
+  } else if (type === 4) {
+    gameSessionQuestions = gameQuestions.filter(q =>
+      q.q.includes("shape") || q.q.includes("sides") ||
+      q.q.includes("round")
+    );
+  } else {
+    gameSessionQuestions = [...gameQuestions];
+  }
+
+  if (!gameSessionQuestions.length) {
+    gameSessionQuestions = [...gameQuestions];
+  }
+
+  currentGameIndex = 0;
+
+  document.getElementById("gameGrid")?.classList.add("hidden");
+  document.getElementById("gameArea")?.classList.remove("hidden");
+
+  showGameQuestion();
+}
+
+function showGameQuestion() {
+  const question = gameSessionQuestions[currentGameIndex];
+  if (!question) return;
+
+  gameAnswered = false;
+
+  const title = document.getElementById("gameTitle");
+  const counter = document.getElementById("gameCounter");
+  const bar = document.getElementById("gameBar");
+  const emoji = document.getElementById("questionEmoji");
+  const questionText = document.getElementById("questionText");
+  const answerGrid = document.getElementById("answerGrid");
+  const feedback = document.getElementById("gameFeedback");
+  const nextBtn = document.getElementById("nextGameBtn");
+
+  if (title) title.textContent = "Learning Game";
+  if (counter) {
+    counter.textContent =
+      `Question ${currentGameIndex + 1} of ${gameSessionQuestions.length}`;
+  }
+  if (bar) {
+    bar.style.width =
+      `${((currentGameIndex + 1) / gameSessionQuestions.length) * 100}%`;
+  }
+  if (emoji) emoji.textContent = question.emoji;
+  if (questionText) questionText.textContent = question.q;
+  if (feedback) feedback.textContent = "";
+  if (nextBtn) nextBtn.classList.add("hidden");
+
+  if (!answerGrid) return;
+  answerGrid.innerHTML = "";
+
+  question.options.forEach(option => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "answer-btn";
+    button.textContent = option;
+
+    button.addEventListener("click", () => checkGameAnswer(option, button));
+    answerGrid.appendChild(button);
+  });
+}
+
+function checkGameAnswer(selected, clickedButton) {
+  if (gameAnswered) return;
+  gameAnswered = true;
+
+  const question = gameSessionQuestions[currentGameIndex];
+  const buttons = document.querySelectorAll("#answerGrid .answer-btn");
+  const feedback = document.getElementById("gameFeedback");
+  const nextBtn = document.getElementById("nextGameBtn");
+
+  buttons.forEach(button => {
+    button.disabled = true;
+
+    if (button.textContent === question.answer) {
+      button.classList.add("correct");
+    }
+  });
+
+  if (selected === question.answer) {
+    if (feedback) feedback.textContent = "🎉 Excellent! Correct answer!";
+    if (typeof studentData !== "undefined" && studentData) {
+      studentData.correctAnswers = (studentData.correctAnswers || 0) + 1;
+      studentData.stars = (studentData.stars || 0) + 1;
+    }
+  } else {
+    clickedButton?.classList.add("wrong");
+    if (feedback) {
+      feedback.textContent = `Good try! The correct answer is ${question.answer}.`;
+    }
+  }
+
+  if (typeof studentData !== "undefined" && studentData) {
+    studentData.gamesPlayed = (studentData.gamesPlayed || 0) + 1;
+    saveStudentData();
+    updateStats();
+  }
+
+  if (nextBtn) {
+    nextBtn.textContent =
+      currentGameIndex === gameSessionQuestions.length - 1
+        ? "Finish Game ✓"
+        : "Next Game →";
+    nextBtn.classList.remove("hidden");
+  }
+}
+
+function nextGameQuestion() {
+  if (!gameAnswered) return;
+
+  if (currentGameIndex < gameSessionQuestions.length - 1) {
+    currentGameIndex++;
+    showGameQuestion();
+  } else {
+    finishGame();
+  }
+}
+
+function finishGame() {
+  const area = document.getElementById("gameArea");
+  if (!area) return;
+
+  area.innerHTML = `
+    <div class="content-panel" style="text-align:center;padding:30px 15px;">
+      <div style="font-size:65px;">🏆</div>
+      <h2>Game Completed!</h2>
+      <p>You finished ${gameSessionQuestions.length} questions.</p>
+      <button class="primary-btn" onclick="backToGames()">
+        Play Another Game
+      </button>
+    </div>
+  `;
+}
+
+function backToGames() {
+  const area = document.getElementById("gameArea");
+  if (area) {
+    area.classList.add("hidden");
+    area.innerHTML = `
+      <div class="game-top">
+        <h2 id="gameTitle">Learning Game</h2>
+        <span id="gameCounter">Question 1</span>
+      </div>
+      <div class="progress-track"><div id="gameBar" class="progress-fill"></div></div>
+      <div class="question-box">
+        <div id="questionEmoji" class="question-emoji">⭐</div>
+        <h3 id="questionText"></h3>
+        <div id="answerGrid" class="answer-grid"></div>
+        <p id="gameFeedback" class="game-feedback"></p>
+        <button id="nextGameBtn" class="primary-btn hidden" onclick="nextGameQuestion()">Next Game →</button>
+      </div>
+    `;
+  }
+
+  document.getElementById("gameGrid")?.classList.remove("hidden");
+}
+
+/* ================================
+   PART 4 — VIDEO PLAYER
+================================ */
+
+function renderVideos() {
+  const player = document.getElementById("videoPlayer");
+  const message = document.getElementById("videoMessage");
+
+  if (player && !player.innerHTML.trim()) {
+    player.innerHTML = `
+      <div style="text-align:center;padding:35px 10px;">
+        <div style="font-size:55px;">📺</div>
+        <h3>Kids Learning Videos</h3>
+        <p>Paste a YouTube video link below to play it here.</p>
+      </div>
+    `;
+  }
+
+  if (message) {
+    message.textContent = "Choose a learning video to watch.";
+  }
+}
+
+function getYouTubeID(url) {
+  try {
+    const parsed = new URL(url.trim());
+    let videoId = "";
+
+    if (parsed.hostname.includes("youtu.be")) {
+      videoId = parsed.pathname.split("/").filter(Boolean)[0] || "";
+    } else if (parsed.hostname.includes("youtube.com")) {
+      if (parsed.pathname === "/watch") {
+        videoId = parsed.searchParams.get("v") || "";
+      } else {
+        const parts = parsed.pathname.split("/").filter(Boolean);
+        const typeIndex = parts.findIndex(part =>
+          ["embed", "shorts", "live"].includes(part)
+        );
+
+        if (typeIndex !== -1) {
+          videoId = parts[typeIndex + 1] || "";
+        }
+      }
+    }
+
+    return /^[a-zA-Z0-9_-]{11}$/.test(videoId) ? videoId : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function playCustomVideo() {
+  const input = document.getElementById("videoUrlInput");
+  const player = document.getElementById("videoPlayer");
+  const message = document.getElementById("videoMessage");
+
+  if (!input || !player) return;
+
+  const videoId = getYouTubeID(input.value);
+
+  if (!videoId) {
+    if (message) {
+      message.textContent = "Please enter a valid YouTube video link.";
+    }
+    return;
+  }
+
+  player.innerHTML = `
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/${videoId}"
+      title="Kids Learning Video"
+      width="100%"
+      height="230"
+      style="border:0;border-radius:14px;"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin">
+    </iframe>
+  `;
+
+  if (message) {
+    message.textContent = "Video loaded. Enjoy learning!";
+  }
+}
+
+function stopVideo() {
+  const player = document.getElementById("videoPlayer");
+  if (player) player.innerHTML = "";
+  renderVideos();
+}
+
+/* =====================================
+   PART 5 — AUTHENTICATION & FINAL SETUP
+===================================== */
+
+const ADMIN_KEY = "klw_admin_v2";
+const LOGIN_KEY = "klw_student_session_v3";
+const PROFILE_KEY = "klw_profile";
+
+let currentStudent = null;
+let studentData = null;
+
+function getAdminDB() {
+  try {
+    const db = JSON.parse(localStorage.getItem(ADMIN_KEY) || "{}");
+
+    if (!Array.isArray(db.students)) db.students = [];
+    if (!Array.isArray(db.loginActivity)) db.loginActivity = [];
+
+    return db;
+  } catch (error) {
+    return { students: [], loginActivity: [] };
+  }
+}
+
+function saveAdminDB(db) {
+  localStorage.setItem(ADMIN_KEY, JSON.stringify(db));
+}
+
+function createStudentID(db) {
+  let id;
+
+  do {
+    id = "KLW" + Math.floor(100000 + Math.random() * 900000);
+  } while (db.students.some(student => student.id === id));
+
+  return id;
+}
+
+function defaultStudentData() {
+  return {
+    gamesPlayed: 0,
+    correctAnswers: 0,
+    stars: 0,
+    dailyDate: new Date().toDateString(),
+    dailyCount: 0,
+    dailyCompleted: false
+  };
+}
+
+function loadStudentData(id) {
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem("klw_data_" + id) || "null"
+    );
+
+    return saved && typeof saved === "object"
+      ? { ...defaultStudentData(), ...saved }
+      : defaultStudentData();
+  } catch (error) {
+    return defaultStudentData();
+  }
+}
+
+function saveStudentData() {
+  if (!currentStudent || !studentData) return;
+
+  localStorage.setItem(
+    "klw_data_" + currentStudent.id,
+    JSON.stringify(studentData)
+  );
+}
+
+function registerStudent() {
+  const nameInput = document.getElementById("registerName");
+  const ageInput = document.getElementById("registerAge");
+  const message = document.getElementById("authMessage");
+
+  const name = nameInput?.value.trim();
+  const age = Number(ageInput?.value);
+
+  if (!name) {
+    if (message) message.textContent = "Please enter the child's name.";
+    return;
+  }
+
+  if (!Number.isInteger(age) || age < 1 || age > 5) {
+    if (message) message.textContent = "Age must be between 1 and 5.";
+    return;
+  }
+
+  const db = getAdminDB();
+
+  const id = createStudentID(db);
+
+  const newStudent = {
+    id: id,
+    name: name,
+    age: age,
+    status: "Active",
+    paymentStatus: "Unpaid",
+    createdAt: new Date().toLocaleString()
+  };
+
+  db.students.push(newStudent);
+  saveAdminDB(db);
+
+  localStorage.setItem(
+    "klw_data_" + id,
+    JSON.stringify(defaultStudentData())
+  );
+
+  currentStudent = newStudent;
+  studentData = defaultStudentData();
+
+  localStorage.setItem(LOGIN_KEY, id);
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(newStudent));
+
+  addLoginActivity(newStudent);
+
+  alert(
+    "Registration successful!\n\nYour Student ID: " + id +
+    "\n\nPlease keep this ID safe."
+  );
+
+  openDashboard();
+}
+
+function loginStudent() {
+  const idInput = document.getElementById("loginId");
+  const ageInput = document.getElementById("loginAge");
+  const message = document.getElementById("authMessage");
+
+  const id = idInput?.value.trim().toUpperCase();
+  const age = Number(ageInput?.value);
+
+  if (!id || !Number.isInteger(age)) {
+    if (message) message.textContent = "Enter your Student ID and age.";
+    return;
+  }
+
+  const db = getAdminDB();
+
+  const student = db.students.find(
+    item => String(item.id).toUpperCase() === id
+  );
+
+  if (!student) {
+    if (message) message.textContent = "Student ID not found.";
+    return;
+  }
+
+  if (student.status !== "Active") {
+    if (message) message.textContent = "This student account is inactive.";
+    return;
+  }
+
+  if (Number(student.age) !== age) {
+    if (message) message.textContent = "Incorrect age. Please try again.";
+    return;
+  }
+
+  currentStudent = student;
+  studentData = loadStudentData(student.id);
+
+  localStorage.setItem(LOGIN_KEY, student.id);
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(student));
+
+  addLoginActivity(student);
+  openDashboard();
+}
+
+function addLoginActivity(student) {
+  const db = getAdminDB();
+
+  db.loginActivity.unshift({
+    studentId: student.id,
+    name: student.name,
+    time: new Date().toLocaleString()
+  });
+
+  db.loginActivity = db.loginActivity.slice(0, 100);
+
+  saveAdminDB(db);
+}
+
+function openDashboard() {
+  if (!currentStudent) return;
+
+  const auth = document.getElementById("authScreen");
+  const app = document.getElementById("app");
+
+  if (auth) auth.classList.add("hidden");
+  if (app) app.classList.remove("hidden");
+
+  const name = currentStudent.name || "Little Learner";
+  const initial = name.charAt(0).toUpperCase();
+
+  const welcomeName = document.getElementById("welcomeName");
+  const headerName = document.getElementById("headerName");
+  const avatar = document.getElementById("headerAvatar");
+
+  if (welcomeName) welcomeName.textContent = name;
+  if (headerName) headerName.textContent = name;
+  if (avatar) avatar.textContent = initial;
+
+  const profileName = document.getElementById("profileName");
+  const profileId = document.getElementById("profileId");
+  const profileAge = document.getElementById("profileAge");
+
+  if (profileName) profileName.textContent = name;
+  if (profileId) profileId.textContent = currentStudent.id;
+  if (profileAge) profileAge.textContent = currentStudent.age;
+
+  renderLearning();
+  renderGames();
+  renderVideos();
+  updateStats();
+  showPage("home");
+}
+
+function updateStats() {
+  if (!studentData) return;
+
+  const today = new Date().toDateString();
+
+  if (studentData.dailyDate !== today) {
+    studentData.dailyDate = today;
+    studentData.dailyCount = 0;
+    studentData.dailyCompleted = false;
+    saveStudentData();
+  }
+
+  const games = studentData.gamesPlayed || 0;
+  const correct = studentData.correctAnswers || 0;
+  const stars = studentData.stars || 0;
+  const daily = studentData.dailyCount || 0;
+
+  const setText = (id, value) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
+  };
+
+  setText("homeGames", games);
+  setText("homeStars", stars);
+  setText("homeDaily", daily + "/10");
+
+  setText("progressGames", games);
+  setText("progressCorrect", correct);
+  setText("progressStars", stars);
+  setText("progressDaily", daily + "/10");
+  setText("challengeCount", daily + "/10");
+
+  const bar = document.getElementById("challengeBar");
+  if (bar) bar.style.width = Math.min(100, daily * 10) + "%";
+
+  const gameBar = document.getElementById("gameBar");
+  if (gameBar && !gameBar.style.width) gameBar.style.width = "0%";
+
+  renderRewards();
+}
+
+function renderRewards() {
+  const stars = studentData?.stars || 0;
+
+  const rewardStars = document.getElementById("rewardStars");
+  const rewardList = document.getElementById("rewardList");
+
+  if (rewardStars) rewardStars.textContent = stars;
+
+  if (rewardList) {
+    const rewards = [
+      { target: 5, name: "First Star", emoji: "⭐" },
+      { target: 10, name: "Super Learner", emoji: "🏅" },
+      { target: 25, name: "Learning Champion", emoji: "🏆" },
+      { target: 50, name: "Star Master", emoji: "🌟" }
+    ];
+
+    rewardList.innerHTML = rewards.map(reward => `
+      <div class="content-panel">
+        <div style="font-size:30px;">${reward.emoji}</div>
+        <strong>${reward.name}</strong>
+        <p>${stars >= reward.target ? "Unlocked!" : reward.target + " stars needed"}</p>
+      </div>
+    `).join("");
+  }
+}
+
+function showPage(page, button) {
+  const pages = {
+    home: "homePage",
+    learning: "learningPage",
+    games: "gamesPage",
+    challenge: "challengePage",
+    videos: "videosPage",
+    progress: "progressPage",
+    rewards: "rewardsPage",
+    profile: "profilePage"
+  };
+
+  Object.values(pages).forEach(id => {
+    document.getElementById(id)?.classList.remove("active");
+  });
+
+  const target = document.getElementById(pages[page]);
+  if (target) target.classList.add("active");
+
+  const titles = {
+    home: "Dashboard",
+    learning: "My Learning",
+    games: "Games",
+    challenge: "Daily Challenge",
+    videos: "Learning Videos",
+    progress: "My Progress",
+    rewards: "Rewards",
+    profile: "My Profile"
+  };
+
+  const pageTitle = document.getElementById("pageTitle");
+  if (pageTitle) pageTitle.textContent = titles[page] || "Dashboard";
+
+  document.querySelectorAll(".nav-link").forEach(item => {
+    item.classList.remove("active");
+  });
+
+  if (button) {
+    button.classList.add("active");
+  } else {
+    const navItems = document.querySelectorAll(".nav-link");
+    navItems.forEach(item => {
+      if ((item.getAttribute("onclick") || "").includes("'" + page + "'")) {
+        item.classList.add("active");
+      }
+    });
+  }
+
+  document.getElementById("sidebar")?.classList.remove("open");
+}
+
+function toggleMenu() {
+  document.getElementById("sidebar")?.classList.toggle("open");
+}
+
+function logout() {
+  localStorage.removeItem(LOGIN_KEY);
+
+  currentStudent = null;
+  studentData = null;
+
+  location.reload();
+}
+
+function autoLogin() {
+  const savedId = localStorage.getItem(LOGIN_KEY);
+
+  if (!savedId) return;
+
+  const db = getAdminDB();
+
+  const student = db.students.find(
+    item => String(item.id).toUpperCase() === savedId.toUpperCase()
+  );
+
+  if (!student || student.status !== "Active") {
+    localStorage.removeItem(LOGIN_KEY);
+    return;
+  }
+
+  currentStudent = student;
+  studentData = loadStudentData(student.id);
+
+  openDashboard();
+}
+
+/* FORM EVENTS */
+
+document.getElementById("loginForm")?.addEventListener("submit", function(event) {
+  event.preventDefault();
+  loginStudent();
+});
+
+document.getElementById("registerForm")?.addEventListener("submit", function(event) {
+  event.preventDefault();
+  registerStudent();
+});
+
+/* AUTH TABS */
+
+document.getElementById("loginTab")?.addEventListener("click", function() {
+  document.getElementById("loginForm")?.classList.remove("hidden");
+  document.getElementById("registerForm")?.classList.add("hidden");
+  document.getElementById("authMessage").textContent = "";
+});
+
+document.getElementById("registerTab")?.addEventListener("click", function() {
+  document.getElementById("registerForm")?.classList.remove("hidden");
+  document.getElementById("loginForm")?.classList.add("hidden");
+  document.getElementById("authMessage").textContent = "";
+});
+
+/* START APPLICATION */
+
+renderLearning();
+renderGames();
+renderVideos();
+autoLogin();
+
+</script>
+</body>
+</html>
